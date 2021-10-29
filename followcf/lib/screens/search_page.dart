@@ -15,6 +15,10 @@ class _SearchState extends State<Search> {
   List<String> handles = [];
   final DioClient _dioClient = DioClient();
 
+  Future func() async {
+    return _dioClient.getUsers(handles: handles);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +35,11 @@ class _SearchState extends State<Search> {
                 users = [];
               });
               handles = [txt];
-              await _dioClient.getUsers(handles: handles).then((value) => {
-                    users = value,
-                    setState(() {}),
+              func().then((data) => {
+                    setState(() {
+                      users = data;
+                    }),
                   });
-              // await Future.delayed(const Duration(seconds: 2));
             }
           },
         ),
