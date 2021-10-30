@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:followcf/utils/dio_client.dart';
 import 'package:followcf/models/submission.dart';
+import 'package:followcf/models/user.dart';
+import 'package:followcf/models/color.dart';
+import 'package:followcf/utils/dio_client.dart';
+import 'package:intl/intl.dart';
 
 class UserHistory extends StatefulWidget {
-  const UserHistory({Key? key, required this.handle}) : super(key: key);
+  const UserHistory({Key? key, required this.u}) : super(key: key);
 
-  final String handle;
+  final User u;
 
   @override
   _UserHistoryState createState() => _UserHistoryState();
@@ -28,14 +31,20 @@ class _UserHistoryState extends State<UserHistory> {
   }
 
   Future func(int start) async {
-    return _dioClient.getSubmissions(handles: [widget.handle], start: start);
+    return _dioClient.getSingleUserSubmissions(user: widget.u, start: start);
+  }
+
+  String convertTime(int creationTimeSeconds) {
+    DateTime dt =
+        DateTime.fromMillisecondsSinceEpoch(creationTimeSeconds * 1000);
+    return DateFormat('MMM/dd/yyyy H:m').format(dt);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.handle),
+        title: Text(widget.u.handle),
       ),
       body: Column(
         children: [
@@ -56,8 +65,23 @@ class _UserHistoryState extends State<UserHistory> {
                             leading:
                                 Text(submissions[i].problemRating.toString()),
                             title: Text(submissions[i].contestId.toString() +
-                                submissions[i].problemIndex),
-                            subtitle: Text(submissions[i].problemName),
+                                submissions[i].problemIndex +
+                                ": " +
+                                submissions[i].problemName),
+                            subtitle: RichText(
+                                text: TextSpan(children: <TextSpan>[
+                              TextSpan(
+                                  text: submissions[i].author,
+                                  style: TextStyle(
+                                      color:
+                                          getColor(submissions[i].authorRank))),
+                              TextSpan(
+                                  text: ", " +
+                                      convertTime(
+                                          submissions[i].creationTimeSeconds),
+                                  style: TextStyle(color: Colors.black))
+                            ])),
+                            isThreeLine: true,
                             trailing: Text(
                               submissions[i].verdict!,
                               style: TextStyle(

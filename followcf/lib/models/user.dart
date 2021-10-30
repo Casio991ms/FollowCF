@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-class user {
+class User {
   String handle;
   String? email;
   String? firstName;
@@ -19,7 +17,7 @@ class user {
   String avatar;
   String titlePhoto;
 
-  user(
+  User(
       {required this.handle,
       this.email,
       this.firstName,
@@ -38,8 +36,8 @@ class user {
       required this.avatar,
       required this.titlePhoto});
 
-  factory user.fromJson(Map<String, dynamic> json) {
-    return user(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       handle: json['handle'],
       email: json['email'],
       firstName: json['firstName'],
@@ -58,32 +56,5 @@ class user {
       avatar: json['avatar'],
       titlePhoto: json['titlePhoto'],
     );
-  }
-
-  Color getColor() {
-    switch (rank) {
-      case "newbie":
-        return const Color(0xFF808080);
-      case "pupil":
-        return const Color(0xFF008000);
-      case "specialist":
-        return const Color(0xFF03A89E);
-      case "expert":
-        return const Color(0xFF0000FE);
-      case "candidate Master":
-        return const Color(0xFFAA00BB);
-      case "master":
-        return const Color(0xFFFF8C00);
-      case "international Master":
-        return const Color(0xFFFF8C00);
-      case "grandmaster":
-        return const Color(0xFFFF0000);
-      case "international Grandmaster":
-        return const Color(0xFFFF0000);
-      case "legendary Grandmaster":
-        return const Color(0xFFFF0000);
-      default:
-        return const Color(0xFFFFFFFF);
-    }
   }
 }

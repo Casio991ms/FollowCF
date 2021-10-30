@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:followcf/models/user.dart';
+import 'package:followcf/models/color.dart';
 import 'package:followcf/utils/dio_client.dart';
 import 'package:followcf/screens/user_page.dart';
 
@@ -11,7 +12,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  List<user?> users = [];
+  List<User> users = [];
   List<String> handles = [];
   final DioClient _dioClient = DioClient();
 
@@ -49,12 +50,14 @@ class _SearchState extends State<Search> {
           users.length,
           (i) => ListTile(
             key: UniqueKey(),
-            title: Text(users[i]!.handle),
-            subtitle: Text(users[i]!.rating.toString()),
+            title: Text(users[i].handle,
+                style: TextStyle(color: getColor(users[i].rank))),
+            subtitle: Text(users[i].rating.toString(),
+                style: TextStyle(color: getColor(users[i].rank))),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserInfo(u: users[i]!)),
+                MaterialPageRoute(builder: (context) => UserInfo(u: users[i])),
               );
             },
           ),

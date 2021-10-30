@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:followcf/screens/ac_submissions.dart';
+import 'package:followcf/screens/all_submissions.dart';
 import 'package:followcf/screens/following_users.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -17,27 +17,27 @@ class _MyDrawerState extends State<MyDrawer> {
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            child: Text(''),
+            child: Text('Follow CF'),
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
           ),
           ListTile(
             title: const Text(
-              'Accepted Submissions',
+              'All Submissions',
               style: TextStyle(fontSize: 20.0),
             ),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const acSub()),
+                MaterialPageRoute(builder: (context) => const AllSubmissions()),
               );
             },
           ),
           ListTile(
             title: const Text(
-              'Users',
+              'Following Users',
               style: TextStyle(fontSize: 20.0),
             ),
             onTap: () {

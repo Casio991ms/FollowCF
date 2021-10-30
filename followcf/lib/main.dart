@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:followcf/screens/ac_submissions.dart';
+import 'package:followcf/screens/all_submissions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const acSub(),
+      home: const AllSubmissions(),
     );
   }
 }

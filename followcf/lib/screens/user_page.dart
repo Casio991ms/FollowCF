@@ -2,12 +2,13 @@ import 'package:followcf/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:followcf/models/user.dart';
+import 'package:followcf/models/color.dart';
 import 'package:followcf/screens/history_page.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({Key? key, required this.u}) : super(key: key);
 
-  final user u;
+  final User u;
 
   @override
   _UserInfoState createState() => _UserInfoState();
@@ -26,7 +27,7 @@ class _UserInfoState extends State<UserInfo> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => UserHistory(handle: widget.u.handle)),
+                    builder: (context) => UserHistory(u: widget.u)),
               );
             },
           )
@@ -49,9 +50,13 @@ class _UserInfoState extends State<UserInfo> {
                       Text(
                         widget.u.rank[0].toUpperCase() +
                             widget.u.rank.substring(1),
-                        style: TextStyle(color: widget.u.getColor()),
+                        style: TextStyle(color: getColor(widget.u.rank)),
                       ),
-                      Text(widget.u.handle),
+                      Text(
+                        widget.u.handle,
+                        style: TextStyle(
+                            color: getColor(widget.u.rank), fontSize: 22),
+                      ),
                       Row(
                         children: [
                           if (widget.u.firstName != null &&
@@ -77,8 +82,34 @@ class _UserInfoState extends State<UserInfo> {
                       if (widget.u.organization != null) ...[
                         Text(widget.u.organization!)
                       ],
-                      Text("Contest rating: ${widget.u.rating}"),
-                      Text("Max: ${widget.u.maxRank}, ${widget.u.maxRating}"),
+                      RichText(
+                        text: TextSpan(children: [
+                          const TextSpan(
+                              text: "Contest rating: ",
+                              style: TextStyle(color: Colors.black)),
+                          TextSpan(
+                              text: widget.u.rating.toString(),
+                              style: TextStyle(color: getColor(widget.u.rank)))
+                        ]),
+                      ),
+                      RichText(
+                          text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              children: [
+                            const TextSpan(
+                              text: "Max: ",
+                            ),
+                            TextSpan(
+                                text: widget.u.maxRank[0].toUpperCase() +
+                                    widget.u.maxRank.substring(1),
+                                style: TextStyle(
+                                    color: getColor(widget.u.maxRank))),
+                            TextSpan(text: ", "),
+                            TextSpan(
+                                text: widget.u.maxRating.toString(),
+                                style: TextStyle(
+                                    color: getColor(widget.u.maxRank)))
+                          ])),
                       Text("Contribution: ${widget.u.contribution}"),
                       Text("Friend of: ${widget.u.friendOfCount}"),
                       if (widget.u.email != null) ...[

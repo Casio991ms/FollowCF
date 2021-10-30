@@ -1,4 +1,5 @@
 import 'package:followcf/globals.dart';
+import 'package:followcf/models/color.dart';
 
 import 'package:followcf/screens/user_page.dart';
 import 'package:followcf/utils/dio_client.dart';
@@ -20,7 +21,7 @@ class _followingState extends State<following> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Users"),
+        title: const Text("Following Users"),
         actions: [
           IconButton(
               onPressed: () {
@@ -38,13 +39,16 @@ class _followingState extends State<following> {
           users.length,
           (i) => ListTile(
             key: UniqueKey(),
-            title: Text(users[i]!.handle),
-            subtitle: Text(users[i]!.rating.toString()),
+            title: Text(
+              users[i].handle,
+              style: TextStyle(color: getColor(users[i].rank)),
+            ),
+            subtitle: Text(users[i].rating.toString()),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
                 setState(() {
-                  handles.remove(users[i]!.handle);
+                  handles.remove(users[i].handle);
                   users.removeAt(i);
                 });
               },
@@ -52,7 +56,7 @@ class _followingState extends State<following> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserInfo(u: users[i]!)),
+                MaterialPageRoute(builder: (context) => UserInfo(u: users[i])),
               );
             },
           ),

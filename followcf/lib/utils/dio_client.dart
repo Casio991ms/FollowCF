@@ -11,8 +11,8 @@ class DioClient {
     ),
   );
 
-  Future<List<user?>> getUsers({required List<String> handles}) async {
-    List<user?> retrievedUsers = [];
+  Future<List<User>> getUsers({required List<String> handles}) async {
+    List<User> retrievedUsers = [];
 
     for (String h in handles) {
       try {
@@ -25,7 +25,7 @@ class DioClient {
         List<dynamic> responseUsers = response.data["result"];
 
         for (Map<String, dynamic> responseUser in responseUsers) {
-          retrievedUsers.add(user.fromJson(responseUser));
+          retrievedUsers.add(User.fromJson(responseUser));
         }
       } on DioError catch (e) {
         if (e.response != null) {
@@ -43,23 +43,57 @@ class DioClient {
     return retrievedUsers;
   }
 
-  Future<List<Submission>> getSubmissions(
-      {required List<String> handles, required int start}) async {
+  Future<List<Submission>> getSingleUserSubmissions(
+      {required User user, required int start}) async {
     List<Submission> retrievedSubmissions = [];
 
-    for (String h in handles) {
+    try {
+      Response response = await _dio
+          .get("user.status?handle=${user.handle}&from=$start&count=10");
+
+      if (response.data["status"] != "OK") {
+        return retrievedSubmissions;
+      }
+
+      List<dynamic> responseSubmissions = response.data["result"];
+
+      for (Map<String, dynamic> responseSubmission in responseSubmissions) {
+        retrievedSubmissions.add(
+            Submission.fromJson(responseSubmission, user.handle, user.rank));
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print('Dio error!');
+        print('STATUS: ${e.response?.statusCode}');
+        print('DATA: ${e.response?.data}');
+        print('HEADERS: ${e.response?.headers}');
+      } else {
+        print('Error sending request!');
+        print(e.message);
+      }
+    }
+
+    return retrievedSubmissions;
+  }
+
+  Future<List<Submission>> getAllUsersSubmissions(
+      {required List<User> users}) async {
+    List<Submission> retrievedSubmissions = [];
+
+    for (User u in users) {
       try {
         Response response =
-            await _dio.get("user.status?handle=$h&from=$start&count=10");
+            await _dio.get("user.status?handle=${u.handle}&from=1&count=10");
 
         if (response.data["status"] != "OK") {
-          continue;
+          return retrievedSubmissions;
         }
 
         List<dynamic> responseSubmissions = response.data["result"];
 
         for (Map<String, dynamic> responseSubmission in responseSubmissions) {
-          retrievedSubmissions.add(Submission.fromJson(responseSubmission, h));
+          retrievedSubmissions
+              .add(Submission.fromJson(responseSubmission, u.handle, u.rank));
         }
       } on DioError catch (e) {
         if (e.response != null) {
@@ -73,6 +107,8 @@ class DioClient {
         }
       }
     }
+    retrievedSubmissions
+        .sort((a, b) => b.creationTimeSeconds.compareTo(a.creationTimeSeconds));
 
     return retrievedSubmissions;
   }
