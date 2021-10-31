@@ -48,8 +48,7 @@ class _followingState extends State<following> {
               icon: const Icon(Icons.delete),
               onPressed: () {
                 setState(() {
-                  handles.remove(users[i].handle);
-                  users.removeAt(i);
+                  removeUser(users[i], context);
                 });
               },
             ),

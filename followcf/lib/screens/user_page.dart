@@ -117,9 +117,11 @@ class _UserInfoState extends State<UserInfo> {
                       ],
                     ],
                   ),
-                  ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 150),
-                      child: Image.network(widget.u.titlePhoto)),
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Image.network(widget.u.titlePhoto),
+                  )),
                 ],
               ),
             ),
@@ -134,15 +136,9 @@ class _UserInfoState extends State<UserInfo> {
                 onPressed: () {
                   setState(() {
                     if (handles.contains(widget.u.handle) == true) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Removed ${widget.u.handle}')));
-                      handles.remove(widget.u.handle);
-                      users.remove(widget.u);
+                      removeUser(widget.u, context);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Added ${widget.u.handle}')));
-                      users.add(widget.u);
-                      handles.add(widget.u.handle);
+                      addUser(widget.u, context);
                     }
                   });
                 },

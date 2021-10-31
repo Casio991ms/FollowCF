@@ -52,8 +52,9 @@ class _SearchState extends State<Search> {
             key: UniqueKey(),
             title: Text(users[i].handle,
                 style: TextStyle(color: getColor(users[i].rank))),
-            subtitle: Text(users[i].rating.toString(),
-                style: TextStyle(color: getColor(users[i].rank))),
+            subtitle: Text(
+              users[i].rating.toString(),
+            ),
             onTap: () {
               Navigator.push(
                 context,

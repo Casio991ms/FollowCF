@@ -16,7 +16,6 @@ class AllSubmissions extends StatefulWidget {
 
 class _AllSubmissions extends State<AllSubmissions> {
   final DioClient _dioClient = DioClient();
-  List<Submission> submissions = [];
   int start = 1;
 
   @override
@@ -25,7 +24,7 @@ class _AllSubmissions extends State<AllSubmissions> {
 
     func().then((data) {
       setState(() {
-        submissions = data;
+        allSubmissions = data;
       });
     });
   }
@@ -49,7 +48,7 @@ class _AllSubmissions extends State<AllSubmissions> {
       drawer: const MyDrawer(),
       body: ListView(
         children: List.generate(
-          submissions.length,
+          allSubmissions.length,
           (i) => Container(
             margin: const EdgeInsets.fromLTRB(10, 3, 10, 3),
             decoration: const BoxDecoration(
@@ -58,27 +57,27 @@ class _AllSubmissions extends State<AllSubmissions> {
             ),
             child: ListTile(
               key: UniqueKey(),
-              leading: Text(submissions[i].problemRating.toString()),
-              title: Text(submissions[i].contestId.toString() +
-                  submissions[i].problemIndex +
+              leading: Text(allSubmissions[i].problemRating.toString()),
+              title: Text(allSubmissions[i].contestId.toString() +
+                  allSubmissions[i].problemIndex +
                   ": " +
-                  submissions[i].problemName),
+                  allSubmissions[i].problemName),
               subtitle: RichText(
                   text: TextSpan(children: <TextSpan>[
                 TextSpan(
-                    text: submissions[i].author,
-                    style:
-                        TextStyle(color: getColor(submissions[i].authorRank))),
+                    text: allSubmissions[i].author,
+                    style: TextStyle(
+                        color: getColor(allSubmissions[i].authorRank))),
                 TextSpan(
-                    text:
-                        ", " + convertTime(submissions[i].creationTimeSeconds),
+                    text: ", " +
+                        convertTime(allSubmissions[i].creationTimeSeconds),
                     style: const TextStyle(color: Colors.black))
               ])),
               isThreeLine: true,
               trailing: Text(
-                submissions[i].verdict!,
+                allSubmissions[i].verdict!,
                 style: TextStyle(
-                    color: submissions[i].verdict! == "OK"
+                    color: allSubmissions[i].verdict! == "OK"
                         ? const Color(0xFF00AA00)
                         : const Color(0xFFFE0000)),
               ),

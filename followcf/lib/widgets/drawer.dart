@@ -17,7 +17,11 @@ class _MyDrawerState extends State<MyDrawer> {
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            child: Text('Follow CF'),
+            child: Center(
+                child: Text(
+              'Follow CF',
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            )),
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
